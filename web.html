@@ -1,0 +1,94 @@
+//replacing getweatherdata with weatherAPI
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Planner</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #weatherOutput, #packageRecommendations {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <h1>Travel Planner</h1>
+    <form id="travelForm">
+        <label for="destination">Destination:</label>
+        <input type="text" id="destination" placeholder="Enter your destination" required>
+
+        <label for="startDate">Start Date:</label>
+        <input type="date" id="startDate" required>
+
+        <label for="endDate">End Date:</label>
+        <input type="date" id="endDate" required>
+
+        <button type="submit">Get Travel Plan</button>
+    </form>
+
+    <div id="weatherOutput"></div>
+    <div id="packageRecommendations"></div>
+
+    <script>
+        document.getElementById('travelForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const destination = document.getElementById('destination').value;
+            const startDate = new Date(document.getElementById('startDate').value);
+            const endDate = new Date(document.getElementById('endDate').value);
+            const weatherOutput = document.getElementById('weatherOutput');
+            const packageRecommendations = document.getElementById('packageRecommendations');
+
+            // Clear previous outputs
+            weatherOutput.innerHTML = '';
+            packageRecommendations.innerHTML = '';
+
+            // Fetch weather data (you would replace getWeatherData with a real API)
+            const weatherData = await getWeatherData(destination, startDate, endDate);
+            displayWeather(weatherData, weatherOutput);
+            displayRecommendations(packageRecommendations);
+        });
+
+        async function getWeatherData(destination, startDate, endDate) {
+            // This is a placeholder for fetching real weather data.
+            // Replace with an actual weather API call.
+            const days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
+            const weather = [];
+
+            for (let i = 0; i < days; i++) {
+                const date = new Date(startDate);
+                date.setDate(startDate.getDate() + i);
+                weather.push({
+                    date: date.toDateString(),
+                    temperature: `${Math.floor(Math.random() * 30) + 15}°C`, // Random temperature
+                    condition: "Sunny" // Static condition for the example
+                });
+            }
+            return weather;
+        }
+
+        function displayWeather(weatherData, outputElement) {
+            outputElement.innerHTML = '<h2>Weather Forecast</h2>';
+            weatherData.forEach(day => {
+                outputElement.innerHTML += `<p>${day.date}: ${day.temperature}, ${day.condition}</p>`;
+            });
+        }
+
+        function displayRecommendations(outputElement) {
+            // Sample recommendations based on weather
+            outputElement.innerHTML = '<h2>Recommended Items</h2>';
+            outputElement.innerHTML += '<ul>';
+            outputElement.innerHTML += '<li>Sunscreen</li>';
+            outputElement.innerHTML += '<li>Lightweight clothing</li>';
+            outputElement.innerHTML += '<li>Water bottle</li>';
+            outputElement.innerHTML += '</ul>';
+        }
+    </script>
+</body>
+</html>
